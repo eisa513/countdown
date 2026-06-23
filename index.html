@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Royal Day | Birthday Countdown</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Alex+Brush&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --deep-black: #0a0406;
+            --burgundy: #1a0508;
+            --burgundy-light: #2d0a10;
+            --rose-deep: #8b1538;
+            --rose-gold: #c44569;
+            --gold: #d4af37;
+            --gold-light: #f9e4b7;
+            --cream: #f5e6d3;
+            --white: #ffffff;
+        }
+
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--deep-black);
+            color: var(--cream);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background layers */
+        .page-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(139, 21, 56, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.12) 0%, transparent 40%),
+                linear-gradient(135deg, var(--deep-black) 0%, var(--burgundy) 50%, var(--deep-black) 100%);
+            z-index: 1;
+        }
+
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, transparent 40%, rgba(10, 4, 6, 0.7) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--gold-light) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 4;
+            opacity: 0.6;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        /* Main container */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        /* Frame box */
+        .frame-box {
+            background: rgba(26, 5, 8, 0.55);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            padding: 55px 45px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(12px);
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, 0.6),
+                0 0 60px rgba(212, 175, 55, 0.08),
+                inset 0 0 40px rgba(139, 21, 56, 0.1);
+            animation: boxGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes boxGlow {
+            from { box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(212, 175, 55, 0.08), inset 0 0 40px rgba(139, 21, 56, 0.1); }
+            to { box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 90px rgba(212, 175, 55, 0.15), inset 0 0 40px rgba(139, 21, 56, 0.15); }
+        }
+
+        .frame-box::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            pointer-events: none;
+        }
+
+        .corner-ornament {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--gold);
+            opacity: 0.7;
+        }
+
+        .corner-ornament.top-right {
+            top: 15px;
+            right: 15px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-ornament.bottom-left {
+            bottom: 15px;
+            left: 15px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .section-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--rose-gold);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+        }
+
+        .section-title span {
+            font-family: 'Alex Brush', cursive;
+            font-size: 1.4em;
+            color: var(--rose-gold);
+            display: block;
+            margin-top: 5px;
+            text-shadow: 0 0 25px rgba(196, 69, 105, 0.4);
+        }
+
+        .section-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            color: var(--cream);
+            opacity: 0.85;
+            line-height: 1.7;
+            margin: 25px 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gold-line {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 25px auto;
+        }
+
+        /* Countdown */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .count-item {
+            background: rgba(26, 5, 8, 0.7);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            padding: 28px 32px;
+            min-width: 110px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .count-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .count-item::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 6px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            pointer-events: none;
+        }
+
+        .count-item .num {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--gold);
+            font-weight: 700;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .count-item .label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--cream);
+            opacity: 0.75;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--gold-light);
+            opacity: 0.85;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 30px auto 0;
+            padding: 20px 25px;
+            border-left: 2px solid rgba(212, 175, 55, 0.4);
+            border-right: 2px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .footer-text {
+            font-family: 'Alex Brush', cursive;
+            font-size: 2.2rem;
+            color: var(--rose-gold);
+            margin-top: 30px;
+            text-shadow: 0 0 20px rgba(196, 69, 105, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .frame-box {
+                padding: 40px 25px;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .section-text {
+                font-size: 1.15rem;
+            }
+
+            .count-item {
+                padding: 22px 24px;
+                min-width: 85px;
+            }
+
+            .count-item .num {
+                font-size: 2.5rem;
+            }
+
+            .count-item .label {
+                font-size: 0.85rem;
+                letter-spacing: 2px;
+            }
+
+            .quote {
+                font-size: 1.15rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .countdown {
+                gap: 12px;
+            }
+
+            .count-item {
+                padding: 18px 20px;
+                min-width: 75px;
+            }
+
+            .count-item .num {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="vignette"></div>
+    <div class="film-grain"></div>
+
+    <div class="main-container">
+        <div class="frame-box">
+            <div class="corner-ornament top-right"></div>
+            <div class="corner-ornament bottom-left"></div>
+
+            <p class="section-label">The Royal Day</p>
+            <h2 class="section-title">22nd July<br><span>Your Day</span></h2>
+            <div class="gold-line"></div>
+
+            <p class="section-text">The day my angel came into this world. I am forever grateful for this day because it brought you into my life.</p>
+
+            <div class="countdown" id="countdown">
+                <div class="count-item">
+                    <div class="num" id="days">00</div>
+                    <div class="label">Days</div>
+                </div>
+                <div class="count-item">
+                    <div class="num" id="hours">00</div>
+                    <div class="label">Hours</div>
+                </div>
+                <div class="count-item">
+                    <div class="num" id="minutes">00</div>
+                    <div class="label">Minutes</div>
+                </div>
+                <div class="count-item">
+                    <div class="num" id="seconds">00</div>
+                    <div class="label">Seconds</div>
+                </div>
+            </div>
+
+            <p class="section-text">Whether it is already 22nd July or still coming, my excitement is always the same. You are the biggest celebration of my life.</p>
+
+            <div class="quote">Birthdays come and go, but a queen like you is born only once in a lifetime. I am blessed to have you.</div>
+
+            <p class="footer-text">You Are My Forever Queen</p>
+        </div>
+    </div>
+
+    <script>
+        // Birthday configuration: month (0-11), day, hour, minute, second
+        const BIRTHDAY_MONTH = 6; // July
+        const BIRTHDAY_DAY = 22;
+        const BIRTHDAY_HOUR = 0;
+        const BIRTHDAY_MINUTE = 0;
+        const BIRTHDAY_SECOND = 0;
+
+        function getNextBirthday() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            let birthday = new Date(currentYear, BIRTHDAY_MONTH, BIRTHDAY_DAY, BIRTHDAY_HOUR, BIRTHDAY_MINUTE, BIRTHDAY_SECOND);
+            if (now > birthday) {
+                birthday = new Date(currentYear + 1, BIRTHDAY_MONTH, BIRTHDAY_DAY, BIRTHDAY_HOUR, BIRTHDAY_MINUTE, BIRTHDAY_SECOND);
+            }
+            return birthday;
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const birthday = getNextBirthday();
+            const diff = birthday - now;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            const daysEl = document.getElementById('days');
+            if (daysEl) {
+                daysEl.textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            }
+        }
+
+        // Floating particles
+        function createParticles() {
+            const particleCount = 25;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDuration = (Math.random() * 10 + 8) + 's';
+                particle.style.animationDelay = (Math.random() * 10) + 's';
+                document.body.appendChild(particle);
+            }
+        }
+
+        createParticles();
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a10342a80ceb4127',t:'MTc4MjIxNTI3MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
